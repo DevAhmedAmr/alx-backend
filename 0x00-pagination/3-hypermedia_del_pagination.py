@@ -56,11 +56,10 @@ class Server:
             - page_size: the current page size
             - data: the actual page of the dataset
         """
-        total_pages = math.ceil(len(self.__dataset) / page_size)
         assert index < len(self.__dataset)
 
         data = []
-        next_index = None
+        next_index: int
         page_size_cpy = page_size
         i = 0
         while i < page_size:
