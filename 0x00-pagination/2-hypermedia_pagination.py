@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Task 2: Hypermedia pagination
+""" 2: Hypermedia pagination
 """
 
 import csv
@@ -34,27 +34,41 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """Retrieves a page of data.
         """
-        assert type(page) == int and type(page_size) == int
-        assert page > 0 and page_size > 0
-        start, end = index_range(page, page_size)
-        data = self.dataset()
-        if start > len(data):
-            return []
-        return data[start:end]
+        function that that takes two integer arguments page
+        with default value 1 and page_size with default value 10.
+        """
+        assert isinstance(page, int)
+        assert isinstance(page_size, int)
+        assert page > 0
+        assert page_size > 0
+        start_idx, end_idx = index_range(page, page_size)
+        return self.dataset()[start_idx:end_idx]
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
-        """Retrieves information about a page.
+        """ returns a dictionary containing the following key-value pairs:
+
+            >>>> page_size: the length of the returned dataset page
+            >>>> page: the current page number
+            >>>> data: the dataset page (equivalent to return from previous task)
+            >>>> next_page: number of the next page, None if no next page
+            >>>> prev_page: number of the previous page, None if no previous page
+            >>>> total_pages: the total number of pages in the dataset as an integer
         """
         data = self.get_page(page, page_size)
-        start, end = index_range(page, page_size)
         total_pages = math.ceil(len(self.__dataset) / page_size)
-        return {
-            'page_size': len(data),
-            'page': page,
-            'data': data,
-            'next_page': page + 1 if end < len(self.__dataset) else None,
-            'prev_page': page - 1 if start > 0 else None,
-            'total_pages': total_pages
-        }
+
+        next_page_num = None
+        prev_page = None
+        if page + 1 <= total_pages:
+            next_page_num = page + 1
+
+        if page - 1 > 0 and page - 1 <= total_pages:
+            prev_page = page - 1
+
+        return {"page_size": len(data),
+                "page": page,
+                "data": data,
+                "next_page": next_page_num,
+                "prev_page": prev_page,
+                "total_pages": total_pages}
