@@ -4,7 +4,6 @@ Main file
 """
 
 index_range = __import__('0-simple_helper_function').index_range
-
 res = index_range(1, 3)
 print(type(res))
 print(res)
