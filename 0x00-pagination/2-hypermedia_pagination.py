@@ -37,6 +37,7 @@ class Server:
         """
         function that that takes two integer arguments page
         with default value 1 and page_size with default value 10.
+        returns : page data
         """
         assert isinstance(page, int)
         assert isinstance(page_size, int)
