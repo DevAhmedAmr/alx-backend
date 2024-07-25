@@ -62,7 +62,7 @@ class Server:
         assert index < len(self.__dataset)
 
         data = []
-        next_index: int
+        next_index: int = None
         page_size_cpy = page_size
         i = 0
         while i < page_size:
@@ -70,7 +70,6 @@ class Server:
                 data.append(self.__indexed_dataset[index + i])
             else:
                 page_size += 1
-
             if i == page_size - 1:
                 next_index = i + index + 1
             i += 1

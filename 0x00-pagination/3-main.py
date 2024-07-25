@@ -2,7 +2,8 @@
 """
 Main file
 """
-
+import datetime
+x = datetime.datetime.now()
 Server = __import__('3-hypermedia_del_pagination').Server
 
 server = Server()
@@ -25,15 +26,19 @@ res = server.get_hyper_index(index, page_size)
 print(res)
 
 # 2- request next index
-print(server.get_hyper_index(res.get('next_index'), page_size))
+res2 = server.get_hyper_index(res.get('next_index'), page_size)
+print(res2)
 
 # 3- remove the first index
 del server._Server__indexed_dataset[res.get('index')]
+# del server._Server__indexed_dataset[res2.get('index')]
+
 print("Nb items: {}".format(len(server._Server__indexed_dataset)))
 
 # 4- request again the initial index -> the first data retreives is not
 # the same as the first request
-print(server.get_hyper_index(index, page_size))
+res3 = server.get_hyper_index(3, page_size)
+print(res3)
 
 # 5- request again initial next index -> same data page as the request 2-
-print(server.get_hyper_index(res.get('next_index'), page_size))
+print(server.get_hyper_index(res3.get('next_index'), page_size))
