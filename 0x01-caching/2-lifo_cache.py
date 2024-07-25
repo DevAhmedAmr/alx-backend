@@ -35,8 +35,8 @@ class LIFOCache(BaseCaching):
         the specified
         """
 
-        if not key and not item:
-            return
+        if not key or not item:
+            return None
 
         if self.cache_data:
             last_key = next(reversed(self.cache_data))
