@@ -1,18 +1,20 @@
 #!/usr/bin/python3
-""" 2-main """
-LIFOCache = __import__('2-lifo_cache').LIFOCache
+"""
+Test
+"""
+import sys
 
-my_cache = LIFOCache()
-my_cache.put("A", "Hello")
-my_cache.put("B", "World")
-my_cache.put("C", "Holberton")
-my_cache.put("D", "School")
-my_cache.print_cache()
-my_cache.put("E", "Battery")
-my_cache.print_cache()
-my_cache.put("C", "Street")
-my_cache.print_cache()
-my_cache.put("F", "Mission")
-my_cache.print_cache()
-my_cache.put("G", "San Francisco")
-my_cache.print_cache()
+try:
+    LIFOCache = __import__('2-lifo_cache').LIFOCache
+
+    my_cache = LIFOCache()
+    my_cache.print_cache()
+    my_cache.put("test1", "myValue")
+    my_cache.print_cache()
+    test1_value = my_cache.get("test1")
+    if test1_value != "myValue":
+        print("get must return 'myValue', as we put it in the cache")
+    else:
+        print("OK")
+except BaseException:
+    print(sys.exc_info()[1])
