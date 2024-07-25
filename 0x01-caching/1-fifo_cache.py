@@ -13,25 +13,25 @@ class FIFOCache(BaseCaching):
        `BaseCaching` and is a caching system.
     '''
 
-    def __init__(self):
-        super().__init__()
-        self.cache_data = OrderedDict()
-
     def put(self, key, item):
-        '''assign to the dictionary `self.cache_data` the
-           `item` value for the key `key`
-        '''
+        """
+        The `put` function adds a key-value pair to a cache,
+        discarding the oldest item if the cache is full.
 
-        if key is None or item is None:
-            return
+        :param key: The `key` parameter in the `put` method represents
+        the key under which the `item` willbe stored in the cache.
+        It is used to uniquely identify the item in the cache so that
+        it can be retrieved later using the same key
 
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            first_key, _ = self.cache_data.popitem(last=False)
-            print(f"DISCARD: {first_key}")
-
-        self.cache_data[key] = item
-
-    def get(self, key):
-        '''return the value in `self.cache_data` linked to `key`
-        '''
-        return self.cache_data.get(key, None)
+        :param item: The `item` parameter in the `put` method represents
+        the value that you want to store in
+        the cache with the corresponding `key`. When you call the `put`
+        method with a `key` and an `item`,
+        the method will store this key-value pair in the cache. If the
+        """
+        if key and item:
+            self.cache_data[key] = item
+            if self.MAX_ITEMS < len(self.cache_data):
+                first_key = next(iter(self.cache_data))
+                del self.cache_data[first_key]
+                print("DISCARD:", first_key)
