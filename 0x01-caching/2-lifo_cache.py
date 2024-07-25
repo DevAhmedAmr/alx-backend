@@ -44,12 +44,6 @@ class LIFOCache(BaseCaching):
                 print("DISCARD:", last_key)
 
     def get(self, key):
-        """Get a cache value .
-
-        Args:
-            key ([type]): [description]
-
-        Returns:
-            [type]: [description]
+        """Retrieves an item by key.
         """
-        return self.cache_data.get(key)
+        return self.cache_data.get(key, None)
