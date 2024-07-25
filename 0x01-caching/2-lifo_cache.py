@@ -34,6 +34,9 @@ class LIFOCache(BaseCaching):
             if self.cache_data:
                 last_key = next(reversed(self.cache_data))
 
+            if key in self.cache_data:
+                del self.cache_data[key]
+
             self.cache_data[key] = item
 
             if self.MAX_ITEMS < len(self.cache_data):

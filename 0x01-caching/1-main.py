@@ -1,16 +1,23 @@
 #!/usr/bin/python3
-""" 1-main """
-FIFOCache = __import__('1-fifo_cache').FIFOCache
+"""
+Test
+"""
+import sys
 
-my_cache = FIFOCache()
-my_cache.put("A", "Hello")
-my_cache.put("B", "World")
-my_cache.put("C", "Holberton")
-my_cache.put("D", "School")
-my_cache.print_cache()
-my_cache.put("E", "Battery")
-my_cache.print_cache()
-my_cache.put("C", "Street")
-my_cache.print_cache()
-my_cache.put("F", "Mission")
-my_cache.print_cache()
+try:
+    FIFOCache = __import__('1-fifo_cache').FIFOCache
+    from base_caching import BaseCaching
+
+    BaseCaching.MAX_ITEMS = 1
+    FIFOCache.MAX_ITEMS = 1
+    my_cache = FIFOCache()
+    my_cache.MAX_ITEMS = 1
+
+    for i in range(5):
+        key = "key-{}".format(i)
+        value = "value-{}".format(i)
+        my_cache.put(key, value)
+        my_cache.print_cache()
+
+except BaseException:
+    print(sys.exc_info()[1])
