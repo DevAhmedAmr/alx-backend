@@ -11,25 +11,31 @@ class LIFOCache(BaseCaching):
     retrieving items from a dictionary with a LIFO
     removal mechanism when the limit is reached.
     """
-    def __init__(self):
-        """Initializes the cache.
-        """
-        super().__init__()
-        self.cache_data = OrderedDict()
 
     def put(self, key, item):
-        """Adds an item in the cache.
         """
-        if key is None or item is None:
-            return
-        if key not in self.cache_data:
-            if len(self.cache_data) + 1 > BaseCaching.MAX_ITEMS:
-                last_key, _ = self.cache_data.popitem(True)
-                print("DISCARD:", last_key)
-        self.cache_data[key] = item
-        self.cache_data.move_to_end(key, last=True)
+        This Python function adds a key-value pair to a cache,
+        discarding the least recently used item if the cache is full.
 
-    def get(self, key):
-        """Retrieves an item by key.
+        :param key: The `key` parameter in the `put` method
+        represents  the key under which the `item` will be stored
+        in the cache.  It is used to uniquely identify the item in
+        the cache
+
+        :param item: The `item` parameter in the `put` method represents
+        the value that you want to store in the cache with the
+        corresponding `key`. When you call the `put`method with a `key`
+        and an `item`, the method will store the `item` in the cache under
+        the specified
         """
-        return self.cache_data.get(key, None)
+
+        if key and item:
+
+            if self.cache_data:
+                last_key = next(reversed(self.cache_data))
+
+            self.cache_data[key] = item
+
+            if self.MAX_ITEMS < len(self.cache_data):
+                del self.cache_data[last_key]
+                print("DISCARD:", last_key)
