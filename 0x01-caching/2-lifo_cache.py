@@ -12,6 +12,12 @@ class LIFOCache(BaseCaching):
     removal mechanism when the limit is reached.
     """
 
+    def __init__(self):
+        """Initializes the cache.
+        """
+        super().__init__()
+        self.cache_data = OrderedDict()
+
     def put(self, key, item):
         """
         This Python function adds a key-value pair to a cache,
@@ -39,11 +45,17 @@ class LIFOCache(BaseCaching):
 
             self.cache_data[key] = item
 
-            if LIFOCache.MAX_ITEMS < len(self.cache_data):
+            if self.MAX_ITEMS < len(self.cache_data):
                 del self.cache_data[last_key]
                 print("DISCARD:", last_key)
 
     def get(self, key):
-        """Retrieves an item by key.
         """
-        return self.cache_data.get(key, None)
+        The `get` function retrieves the value associated with a given key from the cache data.
+
+        :param key: The `key` parameter in the `get` method is used to specify the key for which you want to
+        retrieve the corresponding value from the cache data
+        :return: The `get` method is returning the value associated with the given key from the `cache_data`
+        dictionary.
+        """
+        return self.cache_data.get(key)
