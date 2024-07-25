@@ -35,27 +35,30 @@ class LIFOCache(BaseCaching):
         the specified
         """
 
-        if key and item:
+        if not key and not item:
+            return None
 
-            if self.cache_data:
-                last_key = next(reversed(self.cache_data))
+        if self.cache_data:
+            last_key = next(reversed(self.cache_data))
 
-            if key in self.cache_data:
-                del self.cache_data[key]
+        if key in self.cache_data:
+            del self.cache_data[key]
 
-            self.cache_data[key] = item
+        self.cache_data[key] = item
 
-            if self.MAX_ITEMS < len(self.cache_data):
-                del self.cache_data[last_key]
-                print("DISCARD:", last_key)
+        if self.MAX_ITEMS < len(self.cache_data):
+            del self.cache_data[last_key]
+            print("DISCARD:", last_key)
 
     def get(self, key):
         """
-        The `get` function retrieves the value associated with a given key from the cache data.
+        The `get` function retrieves the value associated with a
+        given key from the cache data.
 
-        :param key: The `key` parameter in the `get` method is used to specify the key for which you want to
-        retrieve the corresponding value from the cache data
-        :return: The `get` method is returning the value associated with the given key from the `cache_data`
-        dictionary.
+        :param key: The `key` parameter in the `get` method is used to
+        specify the key for which you want to retrieve the corresponding
+        value from the cache data
+        :return: The `get` method is returning the value associated with
+        the given key from the `cache_data` dictionary.
         """
         return self.cache_data.get(key)
