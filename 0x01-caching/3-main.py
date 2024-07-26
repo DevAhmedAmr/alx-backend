@@ -1,8 +1,4 @@
 #!/usr/bin/python3
-"""
-Test
-"""
-import sys
 
 LRUCache = __import__('3-lru_cache').LRUCache
 from base_caching import BaseCaching
@@ -31,3 +27,73 @@ my_cache.put("key-20", "value-20")
 my_cache.put("key-21", "value-21")
 my_cache.put("key-22", "value-22")
 my_cache.print_cache()
+"""Current cache:
+key-0: value-0
+Current cache:
+key-0: value-0
+key-1: value-1
+Current cache:
+key-0: value-0
+key-1: value-1
+key-2: value-2
+Current cache:
+key-0: value-0
+key-1: value-1
+key-2: value-2
+key-3: value-3
+Current cache:
+key-0: value-0
+key-1: value-1
+key-2: value-2
+key-3: value-3
+key-4: value-4
+DISCARD: key-0
+Current cache:
+key-1: value-1
+key-2: value-2
+key-3: value-3
+key-4: value-4
+key-5: value-5
+DISCARD: key-1
+Current cache:
+key-2: value-2
+key-3: value-3
+key-4: value-4
+key-5: value-5
+key-6: value-6
+DISCARD: key-2
+Current cache:
+key-3: value-3
+key-4: value-4
+key-5: value-5
+key-6: value-6
+key-7: value-7
+DISCARD: key-3
+Current cache:
+key-4: value-4
+key-5: value-5
+key-6: value-6
+key-7: value-7
+key-8: value-8
+DISCARD: key-4
+Current cache:
+key-5: value-5
+key-6: value-6
+key-7: value-7
+key-8: value-8
+key-9: value-9
+Current cache:
+key-5: value-5
+key-6: value-6
+key-7: value-7
+key-8: value-8
+key-9: value-9
+DISCARD: key-5
+DISCARD: key-8
+DISCARD: key-9
+Current cache:
+key-20: value-20
+key-21: value-21
+key-22: value-22
+key-6: value-6
+key-7: value-7"""

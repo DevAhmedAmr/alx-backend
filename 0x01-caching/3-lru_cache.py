@@ -45,7 +45,7 @@ class LRUCache(BaseCaching):
         # {1,0,2,3}
         if len(self.cache_data) < self.MAX_ITEMS:
             self.cache_data[key] = item
-            self.decrement(key)
+            self.decrement(self.access_order, key)
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
             self.decrement2(self.access_order, key)
@@ -56,7 +56,7 @@ class LRUCache(BaseCaching):
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
 
-            self.decrement(key)
+            self.decrement(self.access_order, key)
             self.access_order[self.MAX_ITEMS] = key
         self.cache_data[key] = item
 
@@ -88,7 +88,10 @@ class LRUCache(BaseCaching):
 
         return self.cache_data.get(key)
 
-    def decrement(self, key: str) -> dict:
+    def decrement(self,  # The `points` dictionary in the LRUCache class is used to keep track of the
+                  # order in which keys were accessed in the cache. It is used to implement the
+                  # Least Recently Used (LRU) caching policy.
+                  access_order: dict, key: str) -> dict:
         """Decrement the value of key in the dictionary
 
         Args:
@@ -99,11 +102,11 @@ class LRUCache(BaseCaching):
             dict: [description]
         """
         temp = {}
-        current_position = get_key_from_value(self.access_order, key)
+        current_position = get_key_from_value(access_order, key)
         if current_position == self.MAX_ITEMS:
-            return self.access_order
+            return access_order
 
-        for position, key_name in self.access_order.items():
+        for position, key_name in access_order.items():
             if position <= self.MAX_ITEMS and position != current_position:
                 temp[position - 1] = key_name
                 position -= 1
