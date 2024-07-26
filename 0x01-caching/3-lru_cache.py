@@ -40,6 +40,8 @@ class LRUCache(BaseCaching):
     def put(self, key, item):
         """Adds an item in the cache.
         """
+        if not (key and item):
+            return None
         # {1,0,2,3}
         if len(self.cache_data) < self.MAX_ITEMS:
             self.cache_data[key] = item
