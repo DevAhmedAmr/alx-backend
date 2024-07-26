@@ -45,7 +45,7 @@ class LRUCache(BaseCaching):
         # {1,0,2,3}
         if len(self.cache_data) < self.MAX_ITEMS:
             self.cache_data[key] = item
-            self.decrement(key)
+            self.update_access_order(key)
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
             self.decrement2(self.access_order, key)
@@ -56,7 +56,7 @@ class LRUCache(BaseCaching):
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
 
-            self.decrement(key)
+            self.update_access_order(key)
             self.access_order[self.MAX_ITEMS] = key
         self.cache_data[key] = item
 
@@ -68,7 +68,7 @@ class LRUCache(BaseCaching):
 
         if len(self.cache_data) < self.MAX_ITEMS:
             value = self.cache_data.get(key)
-            self.decrement(key)
+            self.update_access_order(key)
             # self.points[self.MAX_ITEMS] = key
             return value
 
@@ -83,15 +83,12 @@ class LRUCache(BaseCaching):
             del self.access_order[self.mini]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
-            self.decrement(key)
+            self.update_access_order(key)
             # self.points[self.MAX_ITEMS] = key
 
         return self.cache_data.get(key)
 
-    def decrement(self,  # The `points` dictionary in the LRUCache class is used to keep track of the
-                  # order in which keys were accessed in the cache. It is used to implement the
-                  # Least Recently Used (LRU) caching policy.
-                  key: str) -> dict:
+    def update_access_order(self, key: str) -> None:
         """Decrement the value of key in the dictionary
 
         Args:
@@ -110,8 +107,7 @@ class LRUCache(BaseCaching):
             if position <= self.MAX_ITEMS and position != current_position:
                 temp[position - 1] = key_name
                 position -= 1
-            if position < self.mini:
-                self.mini = position
+                self.mini = min(self.mini, position)
 
         self.access_order = temp
         self.access_order[self.MAX_ITEMS] = key
