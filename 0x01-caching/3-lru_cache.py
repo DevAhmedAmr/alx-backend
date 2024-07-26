@@ -46,7 +46,7 @@ class LRUCache(BaseCaching):
         if len(self.cache_data) < self.MAX_ITEMS:
             self.cache_data[key] = item
 
-            self.points = self.decrement(self.points, key)
+            self.update_access_order(self.points, key)
 
             self.points[self.MAX_ITEMS] = key
 
@@ -59,9 +59,7 @@ class LRUCache(BaseCaching):
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
 
-            self.points = self.decrement(self.points, key)
-            self.points[self.MAX_ITEMS] = key
-        self.cache_data[key] = item
+            self.update_access_order(self.points, key)
 
     def get(self, key):
         """Retrieves an item by key.
@@ -71,8 +69,7 @@ class LRUCache(BaseCaching):
 
         if len(self.cache_data) < self.MAX_ITEMS:
             value = self.cache_data.get(key)
-            self.points = self.decrement(self.points, key)
-            self.points[self.MAX_ITEMS] = key
+            self.update_access_order(self.points, key)
             return value
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
@@ -86,15 +83,14 @@ class LRUCache(BaseCaching):
             del self.points[self.min_access_count]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
-            self.points = self.decrement(self.points, key)
-            self.points[self.MAX_ITEMS] = key
+            self.update_access_order(self.points, key)
 
         return self.cache_data.get(key)
 
-    def decrement(self,  # The `points` dictionary in the LRUCache class is used to keep track of the
-                  # order in which keys were accessed in the cache. It is used to implement the
-                  # Least Recently Used (LRU) caching policy.
-                  access_order: dict, key: str) -> dict:
+    def update_access_order(self,  # The `points` dictionary in the LRUCache class is used to keep track of the
+                            # order in which keys were accessed in the cache. It is used to implement the
+                            # Least Recently Used (LRU) caching policy.
+                            access_order: dict, key: str) -> dict:
         """Decrement the value of key in the dictionary
 
         Args:
@@ -115,7 +111,8 @@ class LRUCache(BaseCaching):
                 position -= 1
                 self.min_access_count = min(self.min_access_count, position)
 
-        return temp
+        self.points[self.MAX_ITEMS] = key
+        self.access_order = temp
 
     def decrement2(self, points: dict, key: str, ) -> dict:
         """Decrement the value of key in the list of points to the smallest key .
