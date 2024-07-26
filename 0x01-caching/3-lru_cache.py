@@ -34,7 +34,7 @@ class LRUCache(BaseCaching):
         '''
         super().__init__()
         self.cache_data = OrderedDict()
-        self.points = OrderedDict()
+        self.access_order = OrderedDict()
         self.min_access_count = self.MAX_ITEMS
 
     def put(self, key, item):
@@ -46,20 +46,20 @@ class LRUCache(BaseCaching):
         if len(self.cache_data) < self.MAX_ITEMS:
             self.cache_data[key] = item
 
-            self.update_access_order(self.points, key)
+            self.update_access_order(self.access_order, key)
 
-            self.points[self.MAX_ITEMS] = key
+            self.access_order[self.MAX_ITEMS] = key
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
-            self.points = self.decrement2(self.points, key)
+            self.access_order = self.decrement2(self.access_order, key)
 
         else:
-            oldest_key = self.points[self.min_access_count]
-            del self.points[self.min_access_count]
+            oldest_key = self.access_order[self.min_access_count]
+            del self.access_order[self.min_access_count]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
 
-            self.update_access_order(self.points, key)
+            self.update_access_order(self.access_order, key)
 
     def get(self, key):
         """Retrieves an item by key.
@@ -69,21 +69,21 @@ class LRUCache(BaseCaching):
 
         if len(self.cache_data) < self.MAX_ITEMS:
             value = self.cache_data.get(key)
-            self.update_access_order(self.points, key)
+            self.update_access_order(self.access_order, key)
             return value
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
-            self.points = self.decrement2(self.points, key)
+            self.access_order = self.decrement2(self.access_order, key)
 
             return self.cache_data.get(key)
         else:
 
-            oldest_key = self.points[self.min_access_count]
+            oldest_key = self.access_order[self.min_access_count]
 
-            del self.points[self.min_access_count]
+            del self.access_order[self.min_access_count]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
-            self.update_access_order(self.points, key)
+            self.update_access_order(self.access_order, key)
 
         return self.cache_data.get(key)
 
@@ -111,7 +111,7 @@ class LRUCache(BaseCaching):
                 position -= 1
                 self.min_access_count = min(self.min_access_count, position)
 
-        self.points[self.MAX_ITEMS] = key
+        temp[self.MAX_ITEMS] = key
         self.access_order = temp
 
     def decrement2(self, points: dict, key: str, ) -> dict:
