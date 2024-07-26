@@ -52,8 +52,8 @@ class LRUCache(BaseCaching):
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
             self.points = self.decrement2(self.points, key)
-        else:
 
+        else:
             oldest_key = self.points[self.mini]
             del self.points[self.mini]
             print("DISCARD:", oldest_key)
@@ -71,13 +71,13 @@ class LRUCache(BaseCaching):
 
         if len(self.cache_data) < self.MAX_ITEMS:
             value = self.cache_data.get(key)
-
             self.points = self.decrement(self.points, key)
             self.points[self.MAX_ITEMS] = key
             return value
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
             self.points = self.decrement2(self.points, key)
+
             return self.cache_data.get(key)
         else:
 
@@ -88,9 +88,13 @@ class LRUCache(BaseCaching):
             del self.cache_data[oldest_key]
             self.points = self.decrement(self.points, key)
             self.points[self.MAX_ITEMS] = key
+
         return self.cache_data.get(key)
 
-    def decrement(self, points: dict, key: str) -> dict:
+    def decrement(self,  # The `points` dictionary in the LRUCache class is used to keep track of the
+                  # order in which keys were accessed in the cache. It is used to implement the
+                  # Least Recently Used (LRU) caching policy.
+                  points: dict, key: str) -> dict:
         """Decrement the value of key in the dictionary
 
         Args:
@@ -102,6 +106,8 @@ class LRUCache(BaseCaching):
         """
         temp = {}
         key_pts = get_key_from_value(points, key)
+        if key_pts == self.MAX_ITEMS:
+            return points
         for point, key_name in points.items():
             if point <= self.MAX_ITEMS and point != key_pts:
                 temp[point - 1] = key_name
@@ -137,32 +143,3 @@ class LRUCache(BaseCaching):
         temp[self.MAX_ITEMS] = key
 
         return temp
-
-
-if "__main__" == __name__:
-    my_cache = LRUCache()
-    my_cache.put("A", "Hello")
-    my_cache.put("B", "World")
-    my_cache.put("C", "Holberton")
-    my_cache.put("D", "School")
-    my_cache.print_cache()
-    print(my_cache.get("B"))
-    my_cache.put("E", "Battery")
-    my_cache.print_cache()
-    my_cache.put("C", "Street")
-    my_cache.print_cache()
-    print(my_cache.get("A"))
-    print(my_cache.get("B"))
-    print(my_cache.get("C"))
-    my_cache.put("F", "Mission")
-    my_cache.print_cache()
-    my_cache.put("G", "San Francisco")
-    my_cache.print_cache()
-    my_cache.put("H", "H")
-    my_cache.print_cache()
-    my_cache.put("I", "I")
-    my_cache.print_cache()
-    my_cache.put("J", "J")
-    my_cache.print_cache()
-    my_cache.put("K", "K")
-    my_cache.print_cache()
