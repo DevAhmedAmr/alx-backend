@@ -35,7 +35,7 @@ class LRUCache(BaseCaching):
         super().__init__()
         self.cache_data = OrderedDict()
         self.points = OrderedDict()
-        self.mini = self.MAX_ITEMS
+        self.min_access_count = self.MAX_ITEMS
 
     def put(self, key, item):
         """Adds an item in the cache.
@@ -54,8 +54,8 @@ class LRUCache(BaseCaching):
             self.points = self.decrement2(self.points, key)
 
         else:
-            oldest_key = self.points[self.mini]
-            del self.points[self.mini]
+            oldest_key = self.points[self.min_access_count]
+            del self.points[self.min_access_count]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
 
@@ -81,9 +81,9 @@ class LRUCache(BaseCaching):
             return self.cache_data.get(key)
         else:
 
-            oldest_key = self.points[self.mini]
+            oldest_key = self.points[self.min_access_count]
 
-            del self.points[self.mini]
+            del self.points[self.min_access_count]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
             self.points = self.decrement(self.points, key)
@@ -94,7 +94,7 @@ class LRUCache(BaseCaching):
     def decrement(self,  # The `points` dictionary in the LRUCache class is used to keep track of the
                   # order in which keys were accessed in the cache. It is used to implement the
                   # Least Recently Used (LRU) caching policy.
-                  points: dict, key: str) -> dict:
+                  access_order: dict, key: str) -> dict:
         """Decrement the value of key in the dictionary
 
         Args:
@@ -105,15 +105,15 @@ class LRUCache(BaseCaching):
             dict: [description]
         """
         temp = {}
-        key_pts = get_key_from_value(points, key)
-        if key_pts == self.MAX_ITEMS:
-            return points
-        for point, key_name in points.items():
-            if point <= self.MAX_ITEMS and point != key_pts:
-                temp[point - 1] = key_name
-                point -= 1
-            if point < self.mini:
-                self.mini = point
+        current_position = get_key_from_value(access_order, key)
+        if current_position == self.MAX_ITEMS:
+            return access_order
+
+        for position, key_name in access_order.items():
+            if position <= self.MAX_ITEMS and position != current_position:
+                temp[position - 1] = key_name
+                position -= 1
+                self.min_access_count = min(self.min_access_count, position)
 
         return temp
 
@@ -136,8 +136,8 @@ class LRUCache(BaseCaching):
             else:
                 temp[point] = key_name
 
-            if point < self.mini:
-                self.mini = point
+            if point < self.min_access_count:
+                self.min_access_count = point
 
         # del temp[key_point]
         temp[self.MAX_ITEMS] = key
