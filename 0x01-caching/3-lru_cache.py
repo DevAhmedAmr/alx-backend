@@ -48,7 +48,8 @@ class LRUCache(BaseCaching):
             self.update_access_order(key)
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
-            self.update_access_order(self.access_order, key)
+            print("55555555555555555555")
+            self.decrement2(self.access_order, key)
 
         else:
             oldest_key = self.access_order[self.mini]
