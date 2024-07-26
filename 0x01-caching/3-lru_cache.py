@@ -8,6 +8,15 @@ from base_caching import BaseCaching
 
 
 def get_key_from_value(d: dict, target_value: any):
+    """Get the first key from a dict that matches the given value .
+
+    Args:
+        d (dict): [description]
+        target_value (any): [description]
+
+    Returns:
+        [type]: [description]
+    """
     for key, value in d.items():
         if value == target_value:
             return key
@@ -16,9 +25,9 @@ def get_key_from_value(d: dict, target_value: any):
 
 
 class LRUCache(BaseCaching):
-    '''A class `LRUCache` that inherits from
+    """A class `LRUCache` that inherits from
        `BaseCaching` and is a caching system
-    '''
+    """
 
     def __init__(self):
         '''initialize the cache
