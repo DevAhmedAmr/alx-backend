@@ -45,13 +45,10 @@ class LRUCache(BaseCaching):
         # {1,0,2,3}
         if len(self.cache_data) < self.MAX_ITEMS:
             self.cache_data[key] = item
-
-            self.points = self.decrement(self.points, key)
-
-            self.points[self.MAX_ITEMS] = key
+            self.decrement(self.points, key)
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
-            self.points = self.decrement2(self.points, key)
+            self.decrement2(self.points, key)
 
         else:
             oldest_key = self.points[self.mini]
@@ -59,7 +56,7 @@ class LRUCache(BaseCaching):
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
 
-            self.points = self.decrement(self.points, key)
+            self.decrement(self.points, key)
             self.points[self.MAX_ITEMS] = key
         self.cache_data[key] = item
 
@@ -71,8 +68,8 @@ class LRUCache(BaseCaching):
 
         if len(self.cache_data) < self.MAX_ITEMS:
             value = self.cache_data.get(key)
-            self.points = self.decrement(self.points, key)
-            self.points[self.MAX_ITEMS] = key
+            self.decrement(self.points, key)
+            # self.points[self.MAX_ITEMS] = key
             return value
 
         elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
@@ -86,8 +83,8 @@ class LRUCache(BaseCaching):
             del self.points[self.mini]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
-            self.points = self.decrement(self.points, key)
-            self.points[self.MAX_ITEMS] = key
+            self.decrement(self.points, key)
+            # self.points[self.MAX_ITEMS] = key
 
         return self.cache_data.get(key)
 
@@ -116,7 +113,8 @@ class LRUCache(BaseCaching):
             if position < self.mini:
                 self.mini = position
 
-        return temp
+        self.points = temp
+        self.points[self.MAX_ITEMS] = key
 
     def decrement2(self, points: dict, key: str, ) -> dict:
         """Decrement the value of key in the list of points to the smallest key .
@@ -131,7 +129,6 @@ class LRUCache(BaseCaching):
         temp = {}
         key_point = get_key_from_value(points, key)
         for point, key_name in points.items():
-
             if point > key_point:
                 temp[point - 1] = key_name
             else:
