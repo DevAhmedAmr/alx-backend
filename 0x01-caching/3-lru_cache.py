@@ -80,6 +80,15 @@ class LRUCache(BaseCaching):
         return self.cache_data.get(key)
 
     def decrement(self, points: dict, key: str) -> dict:
+        """Decrement the value of key in the dictionary
+
+        Args:
+            points (dict): [description]
+            key (str): [description]
+
+        Returns:
+            dict: [description]
+        """
         temp = {}
         key_pts = get_key_from_value(points, key)
         for point, key_name in points.items():
