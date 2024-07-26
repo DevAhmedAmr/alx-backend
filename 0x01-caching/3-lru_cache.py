@@ -101,6 +101,15 @@ class LRUCache(BaseCaching):
         return temp
 
     def decrement2(self, points: dict, key: str, ) -> dict:
+        """Decrement the value of key in the list of points to the smallest key .
+
+        Args:
+            points (dict): [description]
+            key (str): [description]
+
+        Returns:
+            dict: [description]
+        """
         temp = {}
         key_point = get_key_from_value(points, key)
         for point, key_name in points.items():
