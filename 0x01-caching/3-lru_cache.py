@@ -39,60 +39,104 @@ class LRUCache(BaseCaching):
 
     def put(self, key, item):
         """Adds an item in the cache.
-
-        Args:
-            key (str): The key to add.
-            item (any): The item to add.
         """
         if not (key and item):
-            return
+            return None
 
-        if key in self.cache_data:
+        if len(self.cache_data) < self.MAX_ITEMS:
             self.cache_data[key] = item
+            self.update_access_order(key)
+
+        elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
+            self.decrement2(key)
+            # print("2 - ", self.access_order)
+
         else:
-            # print("zz ", self.mini)
-            if len(self.cache_data) >= self.MAX_ITEMS:
-                oldest_key = self.access_order[self.MAX_ITEMS]
-                del self.cache_data[oldest_key]
-                del self.access_order[self.mini]
-                print("DISCARD:", oldest_key)
-            self.cache_data[key] = item
-            self.reorder_keys(key)
+            oldest_key = self.access_order[self.mini]
+            # print(self.mini, oldest_key)
+
+            del self.access_order[self.mini]
+            del self.cache_data[oldest_key]
+            print("DISCARD:", oldest_key)
+            self.update_access_order(key)
+        self.cache_data[key] = item
 
     def get(self, key):
         """Retrieves an item by key.
-
-        Args:
-            key (str): The key to retrieve.
-
-        Returns:
-            any: The item associated with the key, or None if not found.
         """
+        pass
         if key not in self.cache_data:
             return None
 
-        self.reorder_keys(key)
-        return self.cache_data[key]
+        if len(self.cache_data) < self.MAX_ITEMS:
+            value = self.cache_data.get(key)
+            self.update_access_order(key)
+            return value
 
-    def reorder_keys(self, key: str) -> None:
-        """Reorder keys to ensure LRU order.
+        elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
+            self.decrement2(key)
+            return self.cache_data.get(key)
+        else:
+            # print(self.mini)
+            oldest_key = self.access_order[self.mini]
+
+            del self.access_order[self.mini]
+            print("DISCARD:", oldest_key)
+            del self.cache_data[oldest_key]
+            self.update_access_order(key)
+            # self.points[self.MAX_ITEMS] = key
+
+        return self.cache_data.get(key)
+
+    def update_access_order(self, key: str) -> None:
+        """Decrement the value of key in the dictionary
 
         Args:
-            key (str): The key to move to the end of the access order.
+            points (dict): [description]
+            key (str): [description]
+
+        Returns:
+            dict: [description]
         """
         temp = {}
-        key_point = get_key_from_value(self.access_order, key)
-        # print("before ", self.access_order)
-        if key_point is not None:
-            for position, key_name in self.access_order.items():
-                if position > key_point:
-                    temp[position - 1] = key_name
-                else:
-                    temp[position] = key_name
+        current_position = get_key_from_value(self.access_order, key)
+        if current_position == self.MAX_ITEMS:
+            return
+
+        for position, key_name in self.access_order.items():
+            if position <= self.MAX_ITEMS and position != current_position:
+                temp[position - 1] = key_name
+                position -= 1
                 self.mini = min(self.mini, position)
 
-            temp[self.MAX_ITEMS] = key
-            self.access_order = temp
-        else:
-            self.access_order[self.MAX_ITEMS] = key
-        # #print("after ", self.access_order, self.mini)
+        self.access_order = temp
+        self.access_order[self.MAX_ITEMS] = key
+        # print(self.access_order)
+
+    def decrement2(self, key: str, ) -> dict:
+        """Decrement the value of key in the list of points to the smallest key .
+
+        Args:
+            points (dict): [description]
+            key (str): [description]
+
+        Returns:
+            dict: [description]
+        """
+        temp = {}
+        # print("555", self.access_order)
+
+        key_point = get_key_from_value(self.access_order, key)
+        # print("**", key_point)
+        for point, key_name in self.access_order.items():
+            if point > key_point:
+                temp[point - 1] = key_name
+            else:
+                temp[point] = key_name
+
+            if point < self.mini:
+                self.mini = point
+
+        # del temp[key_point]
+        temp[self.MAX_ITEMS] = key
+        self.access_order = temp
