@@ -43,21 +43,20 @@ class LRUCache(BaseCaching):
         if not (key and item):
             return None
 
-        if len(self.cache_data) < self.MAX_ITEMS:
+        if key not in self.cache_data:
             self.cache_data[key] = item
             self.update_access_order(key)
 
-        elif key in self.cache_data:
-            self.decrement2(key)
+            if len(self.cache_data) > self.MAX_ITEMS:
+                oldest_key = self.access_order[self.mini]
+
+                del self.access_order[self.mini]
+                del self.cache_data[oldest_key]
+                print("DISCARD:", oldest_key)
 
         else:
-            oldest_key = self.access_order[self.mini]
 
-            del self.access_order[self.mini]
-            del self.cache_data[oldest_key]
-            print("DISCARD:", oldest_key)
-            self.update_access_order(key)
-        self.cache_data[key] = item
+            self.decrement2(key)
 
     def get(self, key):
         """Retrieves an item by key.
