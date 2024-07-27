@@ -45,7 +45,6 @@ class LRUCache(BaseCaching):
 
         self.cache_data[key] = item
         self.rearrange_order_with_max_check(key)
-        print(self.access_order)
 
         if len(self.cache_data) > self.MAX_ITEMS:
             oldest_key = self.access_order[self.mini]
@@ -60,21 +59,12 @@ class LRUCache(BaseCaching):
         if key not in self.cache_data:
             return None
 
-        if len(self.cache_data) < self.MAX_ITEMS:
-            value = self.cache_data.get(key)
-            self.rearrange_order_with_max_check(key)
-            return value
-
-        elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
-            self.rearrange_order(key)
-            return self.cache_data.get(key)
-        else:
+        self.rearrange_order(key)
+        if len(self.cache_data) > self.MAX_ITEMS:
             oldest_key = self.access_order[self.mini]
-
             del self.access_order[self.mini]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
-            self.rearrange_order_with_max_check(key)
 
         return self.cache_data.get(key)
 
@@ -101,6 +91,7 @@ class LRUCache(BaseCaching):
 
         self.access_order = updated_access_order
         self.access_order[self.MAX_ITEMS] = key
+        # print(self.access_order)
 
     def rearrange_order(self, key: str, ) -> dict:
         """Decrement the value of key in the list of points to the smallest key .
