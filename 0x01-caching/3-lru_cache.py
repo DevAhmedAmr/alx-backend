@@ -47,13 +47,11 @@ class LRUCache(BaseCaching):
             self.cache_data[key] = item
             self.update_access_order(key)
 
-        elif len(self.cache_data) == self.MAX_ITEMS and key in self.cache_data:
+        elif key in self.cache_data:
             self.decrement2(key)
-            # print("2 - ", self.access_order)
 
         else:
             oldest_key = self.access_order[self.mini]
-            # print(self.mini, oldest_key)
 
             del self.access_order[self.mini]
             del self.cache_data[oldest_key]
@@ -77,14 +75,12 @@ class LRUCache(BaseCaching):
             self.decrement2(key)
             return self.cache_data.get(key)
         else:
-            # print(self.mini)
             oldest_key = self.access_order[self.mini]
 
             del self.access_order[self.mini]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
             self.update_access_order(key)
-            # self.points[self.MAX_ITEMS] = key
 
         return self.cache_data.get(key)
 
@@ -111,7 +107,6 @@ class LRUCache(BaseCaching):
 
         self.access_order = temp
         self.access_order[self.MAX_ITEMS] = key
-        # print(self.access_order)
 
     def decrement2(self, key: str, ) -> dict:
         """Decrement the value of key in the list of points to the smallest key .
@@ -124,10 +119,8 @@ class LRUCache(BaseCaching):
             dict: [description]
         """
         temp = {}
-        # print("555", self.access_order)
 
         key_point = get_key_from_value(self.access_order, key)
-        # print("**", key_point)
         for point, key_name in self.access_order.items():
             if point > key_point:
                 temp[point - 1] = key_name
@@ -137,6 +130,5 @@ class LRUCache(BaseCaching):
             if point < self.mini:
                 self.mini = point
 
-        # del temp[key_point]
         temp[self.MAX_ITEMS] = key
         self.access_order = temp
