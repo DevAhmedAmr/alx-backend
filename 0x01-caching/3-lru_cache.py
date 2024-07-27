@@ -52,7 +52,7 @@ class LRUCache(BaseCaching):
         else:
             # print("zz ", self.mini)
             if len(self.cache_data) >= self.MAX_ITEMS:
-                oldest_key = next(iter(self.access_order.values()))
+                oldest_key = self.access_order[self.MAX_ITEMS]
                 del self.cache_data[oldest_key]
                 del self.access_order[self.mini]
                 print("DISCARD:", oldest_key)
