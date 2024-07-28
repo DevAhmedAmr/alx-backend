@@ -35,7 +35,7 @@ class LRUCache(BaseCaching):
         super().__init__()
         self.cache_data = OrderedDict()
         self.access_order = OrderedDict()
-        self.mini = self.MAX_ITEMS
+        self.lowest_pos = self.MAX_ITEMS
 
     def put(self, key, item):
         """Adds an item in the cache.
@@ -47,8 +47,8 @@ class LRUCache(BaseCaching):
         self.rearrange_order_with_max_check(key)
 
         if len(self.cache_data) > self.MAX_ITEMS:
-            oldest_key = self.access_order[self.mini]
-            del self.access_order[self.mini]
+            oldest_key = self.access_order[self.lowest_pos]
+            del self.access_order[self.lowest_pos]
             del self.cache_data[oldest_key]
             print("DISCARD:", oldest_key)
 
@@ -63,8 +63,8 @@ class LRUCache(BaseCaching):
         self.rearrange_order(key)
 
         if len(self.cache_data) > self.MAX_ITEMS:
-            oldest_key = self.access_order[self.mini]
-            del self.access_order[self.mini]
+            oldest_key = self.access_order[self.lowest_pos]
+            del self.access_order[self.lowest_pos]
             print("DISCARD:", oldest_key)
             del self.cache_data[oldest_key]
 
@@ -89,7 +89,7 @@ class LRUCache(BaseCaching):
             if position <= self.MAX_ITEMS and position != current_position:
                 updated_access_order[position - 1] = key_name
                 position -= 1
-                self.mini = min(self.mini, position)
+                self.lowest_pos = min(self.lowest_pos, position)
 
         self.access_order = updated_access_order
         self.access_order[self.MAX_ITEMS] = key
@@ -107,17 +107,17 @@ class LRUCache(BaseCaching):
         updated_access_order = {}
 
         key_point = get_key_from_value(self.access_order, key)
-        for point, key_name in self.access_order.items():
+        for position, key_name in self.access_order.items():
             if key_name == key:
                 continue
 
-            if point > key_point:
-                updated_access_order[point - 1] = key_name
+            if position > key_point:
+                updated_access_order[position - 1] = key_name
 
             else:
-                updated_access_order[point] = key_name
-            if point < self.mini:
-                self.mini = point
+                updated_access_order[position] = key_name
+
+            self.lowest_pos = min(self.lowest_pos, position)
 
         updated_access_order[self.MAX_ITEMS] = key
         self.access_order = updated_access_order
