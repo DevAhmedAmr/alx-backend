@@ -10,10 +10,6 @@ class Config:
     BABEL_DEFAULT_LOCALE = 'en'
 
 
-def get_locale():
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
 app = Flask(__name__)
 app.config.from_object('1-app.Config')
 babel = Babel(app)
@@ -21,6 +17,11 @@ babel = Babel(app)
 
 @app.route("/")
 def school():
+    """
+    This function is used to render a school page .
+    it is used for example in the example of the school module .
+
+    """
     return render_template("1-index.html")
 
 
