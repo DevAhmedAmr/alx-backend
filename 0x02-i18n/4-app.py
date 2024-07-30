@@ -4,11 +4,6 @@ modules to run a simple flask app with babel translation
 """
 from flask import request, Flask, render_template
 from flask_babel import Babel, gettext
-import logging
-log = logging
-# Set level to DEBUG to capture all levels of log messages
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 
 class Config(object):
