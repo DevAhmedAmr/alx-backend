@@ -27,7 +27,7 @@ def get_locale():
 
 
 @app.route("/")
-def school():
+def index():
     """
     This function is used to render a school page .
     it is used for example in the example of the school module .
