@@ -24,7 +24,6 @@ def get_locale():
 
     """
     locals = request.args.get("locale")
-    print(request.args)
 
     if locals in app.config["LANGUAGES"]:
 
