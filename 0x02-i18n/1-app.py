@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+modules to run a simple flask app with babel translation
+"""
 from flask import request, Flask, render_template
 from flask_babel import Babel
 
@@ -11,7 +14,7 @@ class Config:
 
 
 app = Flask(__name__)
-app.config.from_object('1-app.Config')
+app.config.from_object(Config)
 babel = Babel(app)
 
 
